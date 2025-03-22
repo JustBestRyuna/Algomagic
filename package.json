@@ -14,7 +14,12 @@
     "json-to-sql": "ts-node scripts/json-to-sql.ts",
     "process-all-mdc": "ts-node scripts/process-all.ts",
     "mdx-to-problem-json": "ts-node scripts/mdx-to-problem-json.ts",
-    "process-all-mdx": "ts-node scripts/process-all-mdx.ts"
+    "process-all-mdx": "ts-node scripts/process-all-mdx.ts",
+    "test": "vitest run test/integration/data-loading.test.ts",
+    "test:all": "vitest run",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
     "@mdx-js/react": "^3.1.0",
@@ -34,11 +39,15 @@
   "devDependencies": {
     "@mdx-js/rollup": "^3.1.0",
     "@remix-run/dev": "^2.16.2",
+    "@remix-run/testing": "^2.16.2",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.2.0",
     "@types/prismjs": "^1.26.5",
     "@types/react": "^18.2.20",
     "@types/react-dom": "^18.2.7",
     "@typescript-eslint/eslint-plugin": "^6.7.4",
     "@typescript-eslint/parser": "^6.7.4",
+    "@vitejs/plugin-react": "^4.3.4",
     "autoprefixer": "^10.4.21",
     "eslint": "^8.38.0",
     "eslint-import-resolver-typescript": "^3.6.1",
@@ -46,11 +55,14 @@
     "eslint-plugin-jsx-a11y": "^6.7.1",
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
+    "happy-dom": "^17.4.4",
+    "msw": "^2.7.3",
     "postcss": "^8.5.3",
     "tailwindcss": "^3.4.17",
     "typescript": "^5.1.6",
     "vite": "^6.0.0",
-    "vite-tsconfig-paths": "^4.2.1"
+    "vite-tsconfig-paths": "^4.2.1",
+    "vitest": "^3.0.9"
   },
   "engines": {
     "node": ">=20.0.0"

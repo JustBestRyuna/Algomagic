@@ -15,6 +15,7 @@
 - **스타일링**: Tailwind CSS
 - **마크다운 처리**: MDX Bundler
 - **배포**: Render
+- **테스트**: Vitest, React Testing Library, MSW
 
 ## 로컬 개발 환경 설정
 
@@ -47,6 +48,47 @@ SUPABASE_ANON_KEY="your-supabase-anon-key"
 ```sh
 npm run dev
 ```
+
+## 테스트
+
+알고매직은 테스트 주도 개발(TDD) 방식을 채택하고 있으며, 다양한 테스트를 실행할 수 있습니다.
+
+### 테스트 실행 방법
+
+다음 명령어를 사용하여 테스트를 실행할 수 있습니다:
+
+```sh
+# 통합 테스트 실행
+npm test
+
+# 모든 테스트 실행
+npm run test:all
+
+# UI 테스트 실행
+npm run test:ui
+
+# 테스트를 감시 모드로 실행 (파일 변경 시 자동 재실행)
+npm run test:watch
+
+# 테스트 커버리지 확인
+npm run test:coverage
+```
+
+### 테스트 구조
+
+- `test/components/`: UI 컴포넌트 테스트
+- `test/routes/`: 라우트 컴포넌트 테스트
+- `test/integration/`: 통합 테스트
+- `test/test-utils.tsx`: 테스트용 유틸리티 함수
+- `test/setup-test-env.ts`: 테스트 환경 설정
+
+### 테스트 도구
+
+- Vitest: 테스트 러너
+- React Testing Library: UI 테스트
+- MSW(Mock Service Worker): API 요청 모킹
+- Happy DOM: 테스트 환경의 DOM 구현
+- @remix-run/testing: Remix 애플리케이션 테스트 유틸리티
 
 ## 주요 기능
 
