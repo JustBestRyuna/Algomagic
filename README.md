@@ -1,40 +1,129 @@
-# Welcome to Remix!
+# 알고매직 (Algomagic)
 
-- 📖 [Remix docs](https://remix.run/docs)
+알고리즘 문제풀이 가이드를 제공하는 웹서비스입니다.
 
-## Development
+## 프로젝트 소개
 
-Run the dev server:
+알고매직은 여러 온라인 저지(OJ)의 문제들을 분석하여 알고리즘별·난이도별 가이드로 정리한 서비스입니다.
+간단한 문제 설명과 예시, 풀이 아이디어 등을 Markdown 또는 MDX 형태로 제공하며, 일부 문제별 상호작용 컴포넌트(React)를 섞어 더 나은 알고리즘 이해 경험을 제공합니다.
 
-```shellscript
+## 기술 스택
+
+- **프론트엔드**: Remix
+- **백엔드**: Remix (서버 사이드)
+- **데이터베이스**: PostgreSQL (Supabase)
+- **스타일링**: Tailwind CSS
+- **마크다운 처리**: MDX Bundler
+- **배포**: Render
+
+## 로컬 개발 환경 설정
+
+1. 저장소 클론:
+
+```sh
+git clone <저장소-URL>
+cd Algomagic
+```
+
+2. 의존성 설치:
+
+```sh
+npm install
+```
+
+3. 환경 변수 설정:
+
+`.env` 파일을 생성하고 다음 값들을 설정하세요:
+
+```
+DATABASE_URL="file:./data.db?connection_limit=1"
+SESSION_SECRET="your-session-secret"
+SUPABASE_URL="your-supabase-url"
+SUPABASE_ANON_KEY="your-supabase-anon-key"
+```
+
+4. 개발 서버 실행:
+
+```sh
 npm run dev
 ```
 
-## Deployment
+## 주요 기능
 
-First, build your app for production:
+### 튜토리얼 난이도
 
-```sh
-npm run build
-```
+프로그래밍 기초를 배우기 위한 문제들을 단계별로 모았습니다.
 
-Then run the app in production mode:
+- 출력, 사칙연산, 조건문, 반복문, 문자열, 배열, 입출력 심화 등 기초 개념별 문제 제공
+- 각 문제별 상세 설명, 풀이 접근법, Python 및 C++ 모범 답안 제공
 
-```sh
-npm start
-```
+### 브론즈 난이도
 
-Now you'll need to pick a host to deploy it to.
+알고리즘 실력을 키우기 위한 기본 문제들을 모았습니다.
 
-### DIY
+- 구현, 시뮬레이션, 많은 조건 분기 등 유형별 문제 제공
+- 알고리즘 설명 및 풀이 방법 제공
 
-If you're familiar with deploying Node applications, the built-in Remix app server is production-ready.
+## 데이터 구조
 
-Make sure to deploy the output of `npm run build`
+데이터베이스는 다음과 같은 테이블로 구성되어 있습니다:
 
-- `build/server`
-- `build/client`
+- `difficulties`: 문제의 난이도 정보
+- `icons`: 카테고리 아이콘 정보
+- `categories`: 알고리즘 카테고리 정보
+- `problems`: 문제 정보
+- `examples`: 문제별 예제 입출력
 
-## Styling
+## 콘텐츠 관리 워크플로우
 
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever css framework you prefer. See the [Vite docs on css](https://vitejs.dev/guide/features.html#css) for more information.
+### 새 카테고리 추가
+
+1. `category.mdc` 양식을 사용하여 새 카테고리 정보 작성
+2. `npm run category-to-json ./content/categories/difficulty/category-id.md` 실행
+3. `npm run json-to-sql category ./data/categories/difficulty/category-id.json` 실행
+4. 생성된 SQL을 Supabase에 적용
+
+### 새 문제 추가
+
+1. `problem.mdc` 양식을 사용하여 새 문제 정보 작성
+2. `npm run problem-to-json ./content/problems/difficulty/category/problem-id.md` 실행
+3. `npm run json-to-sql problem ./data/problems/difficulty/category/problem-id.json` 실행
+4. 생성된 SQL을 Supabase에 적용
+
+### 콘텐츠 수정
+
+1. **MDX 파일 수정 후 다시 마이그레이션**:
+   ```bash
+   # 1. MDX 파일 수정
+   # 2. 개별 파일 변환
+   npm run mdx-to-problem-json ./content/problems/tutorial/output/hello-world.mdx
+   # 3. JSON을 SQL로 변환
+   npm run json-to-sql problem ./data/problems/tutorial/output/hello-world.json
+   ```
+
+2. **여러 파일 일괄 처리**:
+   ```bash
+   # 여러 MDX 파일을 수정한 후 한 번에 처리
+   npm run process-all-mdx ./content/problems
+   ```
+
+## 유틸리티 스크립트
+
+- `scripts/category-to-json.ts`: 카테고리 MDX 파일을 JSON으로 변환
+- `scripts/problem-to-json.ts`: 문제 MDX 파일을 JSON으로 변환
+- `scripts/json-to-sql.ts`: JSON 파일을 SQL 쿼리로 변환
+- `scripts/process-all-mdx.ts`: 모든 MDX 파일을 일괄 처리
+- `scripts/process-all.ts`: 일괄 처리 유틸리티
+- `supabase_db_utility.ts`: Supabase 데이터베이스 관련 유틸리티 함수
+
+## 디렉토리 구조
+
+- `app/routes/`: 페이지 라우팅 및 컴포넌트
+- `app/components/`: 재사용 가능한 UI 컴포넌트
+- `app/utils/`: 유틸리티 함수
+- `content/problems/`: 문제 MDX 파일
+- `scripts/`: 데이터 변환 및 처리 스크립트
+
+## 라이센스
+
+이 프로젝트는 MIT 라이센스를 따릅니다.

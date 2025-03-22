@@ -4,9 +4,43 @@
 
 html,
 body {
-  @apply bg-white dark:bg-gray-950;
-
-  @media (prefers-color-scheme: dark) {
-    color-scheme: dark;
-  }
+  @apply bg-white text-gray-900;
 }
+
+.text-white {
+  color: white !important;
+}
+
+/* 튜토리얼 테마 색상 명시적 적용 */
+.bg-tutorial-50 { background-color: #f0fdf4 !important; }
+.bg-tutorial-100 { background-color: #dcfce7 !important; }
+.bg-tutorial-200 { background-color: #bbf7d0 !important; }
+.bg-tutorial-300 { background-color: #86efac !important; }
+.bg-tutorial-400 { background-color: #4ade80 !important; }
+.bg-tutorial-500 { background-color: #22c55e !important; }
+.bg-tutorial-600 { background-color: #16a34a !important; }
+.bg-tutorial-700 { background-color: #15803d !important; }
+.bg-tutorial-800 { background-color: #166534 !important; }
+.bg-tutorial-900 { background-color: #14532d !important; }
+.bg-tutorial-950 { background-color: #052e16 !important; }
+
+.text-tutorial-600 { color: #16a34a !important; }
+.text-tutorial-700 { color: #15803d !important; }
+.text-tutorial-800 { color: #166534 !important; }
+
+/* 브론즈 테마 색상 명시적 적용 */
+.bg-bronze-50 { background-color: #fdf6ed !important; }
+.bg-bronze-100 { background-color: #f8e8d0 !important; }
+.bg-bronze-200 { background-color: #f0cc99 !important; }
+.bg-bronze-300 { background-color: #e8aa5f !important; }
+.bg-bronze-400 { background-color: #e28e35 !important; }
+.bg-bronze-500 { background-color: #dd741f !important; }
+.bg-bronze-600 { background-color: #cc5a17 !important; }
+.bg-bronze-700 { background-color: #a84117 !important; }
+.bg-bronze-800 { background-color: #883519 !important; }
+.bg-bronze-900 { background-color: #6f2e18 !important; }
+.bg-bronze-950 { background-color: #3d160a !important; }
+
+.text-bronze-600 { color: #cc5a17 !important; }
+.text-bronze-700 { color: #a84117 !important; }
+.text-bronze-800 { color: #883519 !important; }

@@ -1,0 +1,105 @@
+/* MDX 콘텐츠 스타일링 */
+.mdx-content h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  color: #1f2937;
+}
+
+.mdx-content h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-top: 1.25rem;
+  margin-bottom: 0.75rem;
+  color: #1f2937;
+}
+
+.mdx-content p {
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.mdx-content ul {
+  list-style-type: disc;
+  margin-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.mdx-content ol {
+  list-style-type: decimal;
+  margin-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.mdx-content li {
+  margin-bottom: 0.5rem;
+}
+
+.mdx-content code {
+  font-family: "IBM Plex Mono", monospace;
+  padding: 0.2rem 0.4rem;
+  background-color: #f3f4f6;
+  border-radius: 0.25rem;
+  font-size: 0.875em;
+}
+
+.mdx-content pre {
+  background-color: #2a2a3c;
+  color: #f9fafb;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  margin-bottom: 1rem;
+}
+
+.mdx-content pre code {
+  background-color: transparent;
+  padding: 0;
+  border-radius: 0;
+  color: inherit;
+  font-family: "IBM Plex Mono", monospace;
+}
+
+.mdx-content a {
+  color: #2563eb;
+  text-decoration: underline;
+}
+
+.mdx-content a:hover {
+  text-decoration: none;
+}
+
+.mdx-content blockquote {
+  border-left: 4px solid #e5e7eb;
+  padding-left: 1rem;
+  margin-left: 0;
+  margin-right: 0;
+  margin-bottom: 1rem;
+  font-style: italic;
+}
+
+.mdx-content hr {
+  height: 1px;
+  background-color: #e5e7eb;
+  border: none;
+  margin: 2rem 0;
+}
+
+.solution-markdown ul {
+  list-style-type: disc;
+  margin-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.solution-markdown li {
+  margin-bottom: 0.5rem;
+}
+
+.solution-markdown code {
+  font-family: "IBM Plex Mono", monospace;
+  padding: 0.2rem 0.4rem;
+  background-color: #f3f4f6;
+  border-radius: 0.25rem;
+  font-size: 0.875em;
+}
