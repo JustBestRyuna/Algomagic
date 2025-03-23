@@ -1,6 +1,34 @@
 import { Link } from "@remix-run/react";
 
-export function Navigation() {
+// Navigation 컴포넌트에서 사용할 타입 정의
+interface Difficulty {
+  id: string;
+  name: string;
+  color_text: string;
+  color_accent: string;
+  color_bg_light: string;
+  categoryCount: number;
+  display_name?: string;
+  orderIndex?: number;
+}
+
+interface NavigationProps {
+  difficulties?: Array<Difficulty>;
+}
+
+export function Navigation({ difficulties }: NavigationProps) {
+  // 카테고리가 있는 난이도만 필터링
+  const filteredDifficulties = difficulties || [];
+  
+  // 튜토리얼을 찾아서 맨 앞으로 이동시키는 직접적인 방법
+  const tutorialDifficulty = filteredDifficulties.find(d => d.id === 'tutorial');
+  const otherDifficulties = filteredDifficulties.filter(d => d.id !== 'tutorial');
+  
+  // 정렬된 배열 (튜토리얼이 맨 앞)
+  const sortedDifficulties = tutorialDifficulty 
+    ? [tutorialDifficulty, ...otherDifficulties] 
+    : [...otherDifficulties];
+  
   return (
     <nav className="bg-white shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -18,20 +46,28 @@ export function Navigation() {
               >
                 홈
               </Link>
-              <Link
-                to="/tutorial"
-                className="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-tutorial-600 hover:text-tutorial-700 hover:border-tutorial-300"
-                style={{ color: '#16a34a' }}
-              >
-                튜토리얼
-              </Link>
-              <Link
-                to="/bronze"
-                className="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-bronze-600 hover:text-bronze-700 hover:border-bronze-300"
-                style={{ color: '#cc5a17' }}
-              >
-                브론즈
-              </Link>
+              
+              {/* 동적으로 난이도 메뉴 생성 */}
+              {sortedDifficulties.map((difficulty) => (
+                <Link
+                  key={difficulty.id}
+                  to={`/${difficulty.id}`}
+                  className="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium hover:border-opacity-60"
+                  style={{ 
+                    color: difficulty.color_text || '#16a34a',
+                  }}
+                  onMouseOver={(e) => {
+                    e.currentTarget.style.borderBottomColor = difficulty.color_accent || '#15803d';
+                    e.currentTarget.style.color = difficulty.color_accent || '#15803d';
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.borderBottomColor = 'transparent';
+                    e.currentTarget.style.color = difficulty.color_text || '#16a34a';
+                  }}
+                >
+                  {difficulty.display_name || difficulty.name}
+                </Link>
+              ))}
             </div>
           </div>
           <div className="hidden sm:ml-6 sm:flex sm:items-center">
@@ -71,20 +107,28 @@ export function Navigation() {
           >
             홈
           </Link>
-          <Link
-            to="/tutorial"
-            className="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-tutorial-600 hover:bg-tutorial-50 hover:border-tutorial-300 hover:text-tutorial-700"
-            style={{ color: '#16a34a' }}
-          >
-            튜토리얼
-          </Link>
-          <Link
-            to="/bronze"
-            className="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-bronze-600 hover:bg-bronze-50 hover:border-bronze-300 hover:text-bronze-700"
-            style={{ color: '#cc5a17' }}
-          >
-            브론즈
-          </Link>
+          
+          {/* 동적으로 모바일 메뉴 생성 */}
+          {sortedDifficulties.map((difficulty) => (
+            <Link
+              key={difficulty.id}
+              to={`/${difficulty.id}`}
+              className="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium hover:border-opacity-60"
+              style={{ 
+                color: difficulty.color_text || '#16a34a',
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.borderBottomColor = difficulty.color_accent || '#15803d';
+                e.currentTarget.style.color = difficulty.color_accent || '#15803d';
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.borderBottomColor = 'transparent';
+                e.currentTarget.style.color = difficulty.color_text || '#16a34a';
+              }}
+            >
+              {difficulty.display_name || difficulty.name}
+            </Link>
+          ))}
         </div>
       </div>
     </nav>

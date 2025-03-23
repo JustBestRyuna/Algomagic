@@ -120,9 +120,11 @@ export interface Database {
           solution_idea: string
           python_code: string | null
           cpp_code: string | null
-          input_description: string
-          output_description: string
           notes: string | null
+          is_required: boolean
+          module_order: number | null
+          module_description: string | null
+          oj_link: string | null
           created_at: string
           updated_at: string
         }
@@ -137,9 +139,11 @@ export interface Database {
           solution_idea: string
           python_code?: string | null
           cpp_code?: string | null
-          input_description: string
-          output_description: string
           notes?: string | null
+          is_required?: boolean
+          module_order?: number | null
+          module_description?: string | null
+          oj_link?: string | null
           created_at?: string
           updated_at?: string
         }
@@ -154,9 +158,11 @@ export interface Database {
           solution_idea?: string
           python_code?: string | null
           cpp_code?: string | null
-          input_description?: string
-          output_description?: string
           notes?: string | null
+          is_required?: boolean
+          module_order?: number | null
+          module_description?: string | null
+          oj_link?: string | null
           created_at?: string
           updated_at?: string
         }

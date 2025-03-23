@@ -12,35 +12,120 @@ body {
 }
 
 /* 튜토리얼 테마 색상 명시적 적용 */
-.bg-tutorial-50 { background-color: #f0fdf4 !important; }
-.bg-tutorial-100 { background-color: #dcfce7 !important; }
-.bg-tutorial-200 { background-color: #bbf7d0 !important; }
-.bg-tutorial-300 { background-color: #86efac !important; }
-.bg-tutorial-400 { background-color: #4ade80 !important; }
-.bg-tutorial-500 { background-color: #22c55e !important; }
-.bg-tutorial-600 { background-color: #16a34a !important; }
-.bg-tutorial-700 { background-color: #15803d !important; }
-.bg-tutorial-800 { background-color: #166534 !important; }
-.bg-tutorial-900 { background-color: #14532d !important; }
-.bg-tutorial-950 { background-color: #052e16 !important; }
+.bg-tutorial-50 { background-color: #e7faea !important; }
+.bg-tutorial-100 { background-color: #c4f2c9 !important; }
+.bg-tutorial-200 { background-color: #9de9a5 !important; }
+.bg-tutorial-300 { background-color: #6ddb7a !important; }
+.bg-tutorial-400 { background-color: #4ccf60 !important; }
+.bg-tutorial-500 { background-color: #2eb842 !important; }
+.bg-tutorial-600 { background-color: #219e36 !important; }
+.bg-tutorial-700 { background-color: #17842b !important; }
+.bg-tutorial-800 { background-color: #0f6b20 !important; }
+.bg-tutorial-900 { background-color: #075417 !important; }
+.bg-tutorial-950 { background-color: #033d0e !important; }
 
-.text-tutorial-600 { color: #16a34a !important; }
-.text-tutorial-700 { color: #15803d !important; }
-.text-tutorial-800 { color: #166534 !important; }
+.text-tutorial-600 { color: #219e36 !important; }
+.text-tutorial-700 { color: #17842b !important; }
+.text-tutorial-800 { color: #0f6b20 !important; }
 
 /* 브론즈 테마 색상 명시적 적용 */
-.bg-bronze-50 { background-color: #fdf6ed !important; }
-.bg-bronze-100 { background-color: #f8e8d0 !important; }
-.bg-bronze-200 { background-color: #f0cc99 !important; }
-.bg-bronze-300 { background-color: #e8aa5f !important; }
-.bg-bronze-400 { background-color: #e28e35 !important; }
-.bg-bronze-500 { background-color: #dd741f !important; }
-.bg-bronze-600 { background-color: #cc5a17 !important; }
-.bg-bronze-700 { background-color: #a84117 !important; }
-.bg-bronze-800 { background-color: #883519 !important; }
-.bg-bronze-900 { background-color: #6f2e18 !important; }
-.bg-bronze-950 { background-color: #3d160a !important; }
+.bg-bronze-50 { background-color: #fbf2e6 !important; }
+.bg-bronze-100 { background-color: #f5e1c5 !important; }
+.bg-bronze-200 { background-color: #ebc89b !important; }
+.bg-bronze-300 { background-color: #e0a867 !important; }
+.bg-bronze-400 { background-color: #d7863e !important; }
+.bg-bronze-500 { background-color: #c76a29 !important; }
+.bg-bronze-600 { background-color: #a85321 !important; }
+.bg-bronze-700 { background-color: #863f1c !important; }
+.bg-bronze-800 { background-color: #6f3018 !important; }
+.bg-bronze-900 { background-color: #5c2816 !important; }
+.bg-bronze-950 { background-color: #3d170d !important; }
 
-.text-bronze-600 { color: #cc5a17 !important; }
-.text-bronze-700 { color: #a84117 !important; }
-.text-bronze-800 { color: #883519 !important; }
+.text-bronze-600 { color: #a85321 !important; }
+.text-bronze-700 { color: #863f1c !important; }
+.text-bronze-800 { color: #6f3018 !important; }
+
+/* 실버 테마 색상 명시적 적용 */
+.bg-silver-50 { background-color: #f6f6f8 !important; }
+.bg-silver-100 { background-color: #e8e9ec !important; }
+.bg-silver-200 { background-color: #d4d6de !important; }
+.bg-silver-300 { background-color: #b3b7c2 !important; }
+.bg-silver-400 { background-color: #8b91a2 !important; }
+.bg-silver-500 { background-color: #6e7486 !important; }
+.bg-silver-600 { background-color: #5b5f70 !important; }
+.bg-silver-700 { background-color: #4a4e5c !important; }
+.bg-silver-800 { background-color: #40434d !important; }
+.bg-silver-900 { background-color: #383a42 !important; }
+.bg-silver-950 { background-color: #252629 !important; }
+
+.text-silver-600 { color: #5b5f70 !important; }
+.text-silver-700 { color: #4a4e5c !important; }
+.text-silver-800 { color: #40434d !important; }
+
+/* 골드 테마 색상 명시적 적용 */
+.bg-gold-50 { background-color: #fdf7e7 !important; }
+.bg-gold-100 { background-color: #fbecbf !important; }
+.bg-gold-200 { background-color: #f7dd8e !important; }
+.bg-gold-300 { background-color: #f3c654 !important; }
+.bg-gold-400 { background-color: #efb32c !important; }
+.bg-gold-500 { background-color: #e49619 !important; }
+.bg-gold-600 { background-color: #c37513 !important; }
+.bg-gold-700 { background-color: #9d5912 !important; }
+.bg-gold-800 { background-color: #804714 !important; }
+.bg-gold-900 { background-color: #6b3a13 !important; }
+.bg-gold-950 { background-color: #421f09 !important; }
+
+.text-gold-600 { color: #c37513 !important; }
+.text-gold-700 { color: #9d5912 !important; }
+.text-gold-800 { color: #804714 !important; }
+
+/* 플래티넘 테마 색상 명시적 적용 */
+.bg-platinum-50 { background-color: #ebfafd !important; }
+.bg-platinum-100 { background-color: #d0f3fa !important; }
+.bg-platinum-200 { background-color: #a5e8f5 !important; }
+.bg-platinum-300 { background-color: #6dd7ee !important; }
+.bg-platinum-400 { background-color: #3cc5e3 !important; }
+.bg-platinum-500 { background-color: #00c4e2 !important; }
+.bg-platinum-600 { background-color: #00a3c0 !important; }
+.bg-platinum-700 { background-color: #00829b !important; }
+.bg-platinum-800 { background-color: #006b81 !important; }
+.bg-platinum-900 { background-color: #055a6e !important; }
+.bg-platinum-950 { background-color: #033b49 !important; }
+
+.text-platinum-600 { color: #00a3c0 !important; }
+.text-platinum-700 { color: #00829b !important; }
+.text-platinum-800 { color: #006b81 !important; }
+
+/* 다이아몬드 테마 색상 명시적 적용 */
+.bg-diamond-50 { background-color: #eef4ff !important; }
+.bg-diamond-100 { background-color: #dee9ff !important; }
+.bg-diamond-200 { background-color: #c4d8ff !important; }
+.bg-diamond-300 { background-color: #9cbffd !important; }
+.bg-diamond-400 { background-color: #78a6fa !important; }
+.bg-diamond-500 { background-color: #4985e4 !important; }
+.bg-diamond-600 { background-color: #3a6fd2 !important; }
+.bg-diamond-700 { background-color: #2c56b0 !important; }
+.bg-diamond-800 { background-color: #284992 !important; }
+.bg-diamond-900 { background-color: #273f75 !important; }
+.bg-diamond-950 { background-color: #17274e !important; }
+
+.text-diamond-600 { color: #3a6fd2 !important; }
+.text-diamond-700 { color: #2c56b0 !important; }
+.text-diamond-800 { color: #284992 !important; }
+
+/* 루비 테마 색상 명시적 적용 */
+.bg-ruby-50 { background-color: #fef2f2 !important; }
+.bg-ruby-100 { background-color: #ffe0e0 !important; }
+.bg-ruby-200 { background-color: #ffc5c5 !important; }
+.bg-ruby-300 { background-color: #ff9999 !important; }
+.bg-ruby-400 { background-color: #ff5d5d !important; }
+.bg-ruby-500 { background-color: #ff3333 !important; }
+.bg-ruby-600 { background-color: #e61919 !important; }
+.bg-ruby-700 { background-color: #c01212 !important; }
+.bg-ruby-800 { background-color: #a01414 !important; }
+.bg-ruby-900 { background-color: #841717 !important; }
+.bg-ruby-950 { background-color: #480707 !important; }
+
+.text-ruby-600 { color: #e61919 !important; }
+.text-ruby-700 { color: #c01212 !important; }
+.text-ruby-800 { color: #a01414 !important; }

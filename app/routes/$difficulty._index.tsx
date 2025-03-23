@@ -17,6 +17,7 @@ interface CategoryData {
   id: string;
   title: string;
   description: string;
+  shortDescription: string;
   iconId: string;
   svgPath: string;
   problems: {
@@ -104,7 +105,8 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
       .select(`
         id, 
         title, 
-        description, 
+        description,
+        short_description, 
         icon_id,
         icons:icon_id(svg_path)
       `)
@@ -123,6 +125,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
           .select('id, title')
           .eq('category_id', category.id)
           .eq('difficulty_id', difficulty)
+          .eq('is_required', true)
           .order('order_num');
 
         if (problemsError) {
@@ -139,6 +142,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
           id: category.id,
           title: category.title,
           description: category.description,
+          shortDescription: category.short_description || category.description.split('.')[0] + '.',
           iconId: category.icon_id,
           svgPath,
           problems: problemsData || [],
@@ -197,20 +201,17 @@ export default function DifficultyIndex() {
   const { difficulty, difficultyName, description, categories, colors } = data;
 
   return (
-    <div className={`${colors.bgLight} min-h-screen pb-16`}>
-      <div className={`${colors.bg} text-white`}>
+    <div className="min-h-screen pb-16" style={{ backgroundColor: colors.bgLight }}>
+      <div className="text-white" style={{ 
+        backgroundColor: colors.accent,
+        boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+        color: "white"
+      }}>
         <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl">{difficultyName} 난이도</h1>
-            <p className="mt-6 max-w-2xl mx-auto text-xl">
-              {description.long.split('\n').map((line, i) => (
-                <span key={i}>
-                  {line}
-                  {i < description.long.split('\n').length - 1 && (
-                    <br className="hidden sm:inline" />
-                  )}
-                </span>
-              ))}
+            <p className="mt-6 max-w-2xl mx-auto text-xl font-medium">
+              {description.short}
             </p>
           </div>
         </div>
@@ -221,11 +222,16 @@ export default function DifficultyIndex() {
           {categories.map((category) => (
             <div 
               key={category.id} 
-              className={`bg-white rounded-lg shadow-sm overflow-hidden transition-all hover:shadow-md border ${colors.border}`}
+              className="bg-white rounded-lg shadow-sm overflow-hidden transition-all hover:shadow-md border"
+              style={{ borderColor: colors.border }}
             >
               <div className="px-6 py-6">
                 <div className="flex items-center mb-4">
-                  <div className={`flex-shrink-0 h-12 w-12 rounded-md ${colors.bg} text-white p-3`}>
+                  <div className="flex-shrink-0 h-12 w-12 rounded-md text-white p-3" style={{ 
+                    backgroundColor: colors.accent,
+                    boxShadow: "0 2px 4px -1px rgba(0, 0, 0, 0.1)",
+                    color: "white"
+                  }}>
                     <CategoryIcon svgPath={category.svgPath} />
                   </div>
                   <div className="ml-4">
@@ -233,19 +239,21 @@ export default function DifficultyIndex() {
                   </div>
                 </div>
                 
-                <p className="text-gray-600 mb-6">{category.description}</p>
+                <p className="text-gray-600 mb-6 text-sm">
+                  {category.shortDescription}
+                </p>
                 
-                <div className={`border-t ${colors.border} pt-4`}>
-                  <h3 className="text-lg font-medium text-gray-900 mb-3">문제 목록:</h3>
+                <div className="border-t pt-4" style={{ borderColor: colors.border }}>
+                  <h3 className="text-lg font-medium text-gray-900 mb-3">필수 문제 목록:</h3>
                   <ul className="space-y-2 mb-6">
                     {category.problems.map((problem) => (
                       <li key={problem.id} className="flex items-start">
-                        <svg className={`flex-shrink-0 mt-1 mr-2 h-5 w-5 ${colors.text}`} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                        <svg className="flex-shrink-0 mt-1 mr-2 h-5 w-5" style={{ color: colors.text }} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                           <path fillRule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" />
                         </svg>
                         <Link 
                           to={`/${difficulty}/${category.id}/${problem.id}`}
-                          className={`${colors.text} hover:underline hover:text-${difficulty}-800 font-medium`}
+                          className="font-medium hover:underline"
                           style={{ color: colors.accent }}
                         >
                           {problem.title}
@@ -258,7 +266,8 @@ export default function DifficultyIndex() {
                 <div className="mt-2">
                   <Link 
                     to={`/${difficulty}/${category.id}`} 
-                    className={`inline-flex items-center ${colors.text} hover:text-${difficulty}-800 font-medium`}
+                    className="inline-flex items-center font-medium"
+                    style={{ color: colors.text }}
                   >
                     {category.title} 모든 문제 보기
                     <svg className="ml-1 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">

@@ -118,36 +118,19 @@ npm run test:coverage
 
 ## 콘텐츠 관리 워크플로우
 
-### 새 카테고리 추가
+### 새로운 작업 흐름 (SQL 직접 생성)
 
-1. `category.mdc` 양식을 사용하여 새 카테고리 정보 작성
-2. `npm run category-to-json ./content/categories/difficulty/category-id.md` 실행
-3. `npm run json-to-sql category ./data/categories/difficulty/category-id.json` 실행
-4. 생성된 SQL을 Supabase에 적용
+### 새 카테고리 추가하기
 
-### 새 문제 추가
+1. `content/templates/category.mdc` 양식을 사용하여 새 카테고리 정보를 SQL 형식으로 작성
+2. 작성된 SQL을 `content/categories/difficulty/category-id.sql`에 저장
+3. 생성된 SQL을 Supabase에 직접 적용
 
-1. `problem.mdc` 양식을 사용하여 새 문제 정보 작성
-2. `npm run problem-to-json ./content/problems/difficulty/category/problem-id.md` 실행
-3. `npm run json-to-sql problem ./data/problems/difficulty/category/problem-id.json` 실행
-4. 생성된 SQL을 Supabase에 적용
+### 새 문제 추가하기
 
-### 콘텐츠 수정
-
-1. **MDX 파일 수정 후 다시 마이그레이션**:
-   ```bash
-   # 1. MDX 파일 수정
-   # 2. 개별 파일 변환
-   npm run mdx-to-problem-json ./content/problems/tutorial/output/hello-world.mdx
-   # 3. JSON을 SQL로 변환
-   npm run json-to-sql problem ./data/problems/tutorial/output/hello-world.json
-   ```
-
-2. **여러 파일 일괄 처리**:
-   ```bash
-   # 여러 MDX 파일을 수정한 후 한 번에 처리
-   npm run process-all-mdx ./content/problems
-   ```
+1. `content/templates/problem.mdc` 양식을 사용하여 새 문제 정보를 SQL 형식으로 작성
+2. 작성된 SQL을 `content/problems/difficulty/category/problem-id.sql`에 저장
+3. 생성된 SQL을 Supabase에 직접 적용
 
 ## 유틸리티 스크립트
 

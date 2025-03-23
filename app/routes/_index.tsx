@@ -1,5 +1,68 @@
-import { MetaFunction } from "@remix-run/node";
-import { Link } from "@remix-run/react";
+import { MetaFunction, json } from "@remix-run/node";
+import { Link, useLoaderData } from "@remix-run/react";
+import { supabase } from "~/utils/supabase.server";
+import { Difficulty } from "~/root";
+
+interface LoaderData {
+  difficulties: Difficulty[];
+}
+
+export const loader = async () => {
+  // 모든 난이도 정보 가져오기
+  const { data: difficulties, error: difficultiesError } = await supabase
+    .from('difficulties')
+    .select('id, name, short_description, long_description, color_bg, color_bg_light, color_hover, color_text, color_border, color_accent');
+
+  if (difficultiesError) {
+    console.error("난이도 정보를 가져오는데 실패했습니다:", difficultiesError);
+    return json({ difficulties: [] });
+  }
+
+  // 수동으로 정의한 난이도 순서
+  const difficultyOrder = {
+    'tutorial': 0,
+    'bronze': 1, 
+    'silver': 2,
+    'gold': 3,
+    'platinum': 4,
+    'diamond': 5,
+    'ruby': 6
+  };
+
+  // 각 난이도별 카테고리 수 확인
+  const difficultiesWithCategories = await Promise.all(
+    difficulties.map(async (difficulty) => {
+      const { count, error: countError } = await supabase
+        .from('categories')
+        .select('*', { count: 'exact' })
+        .eq('difficulty_id', difficulty.id);
+      
+      if (countError) {
+        console.error(`${difficulty.id} 난이도의 카테고리 수를 가져오는데 실패했습니다:`, countError);
+        return { 
+          ...difficulty, 
+          categoryCount: 0, 
+          display_name: difficulty.name,
+          description: difficulty.short_description,
+          orderIndex: difficultyOrder[difficulty.id as keyof typeof difficultyOrder]
+        };
+      }
+      
+      return { 
+        ...difficulty, 
+        categoryCount: count || 0, 
+        display_name: difficulty.name,
+        description: difficulty.short_description,
+        orderIndex: difficultyOrder[difficulty.id as keyof typeof difficultyOrder]
+      };
+    })
+  );
+
+  // 난이도 순서대로 정렬
+  const sortedDifficulties = difficultiesWithCategories.sort((a, b) => a.orderIndex - b.orderIndex);
+
+  return json({ difficulties: sortedDifficulties });
+};
 
 export const meta: MetaFunction = () => {
   return [
@@ -9,6 +72,11 @@ export const meta: MetaFunction = () => {
 };
 
 export default function Index() {
+  const { difficulties } = useLoaderData<LoaderData>();
+  
+  // 첫 두 개 난이도를 메인 버튼으로 표시
+  const mainDifficulties = difficulties.slice(0, 2);
+  
   return (
     <div>
       {/* 히어로 섹션 */}
@@ -24,24 +92,26 @@ export default function Index() {
               쉽고 친절한 설명과 풀이 아이디어로 알고리즘 학습을 도와드립니다.
             </p>
             <div className="max-w-md mx-auto mt-5 sm:flex sm:justify-center md:mt-8">
-              <div className="rounded-md shadow">
-                <Link
-                  to="/tutorial"
-                  className="flex items-center justify-center w-full px-8 py-3 text-base font-medium text-white bg-tutorial-600 border border-transparent rounded-md hover:bg-tutorial-700 md:py-4 md:text-lg md:px-10"
-                  style={{ color: 'white' }}
-                >
-                  튜토리얼 시작하기
-                </Link>
-              </div>
-              <div className="mt-3 rounded-md shadow sm:mt-0 sm:ml-3">
-                <Link
-                  to="/bronze"
-                  className="flex items-center justify-center w-full px-8 py-3 text-base font-medium text-white bg-bronze-600 border border-transparent rounded-md hover:bg-bronze-700 md:py-4 md:text-lg md:px-10"
-                  style={{ color: 'white' }}
-                >
-                  브론즈 문제 풀기
-                </Link>
-              </div>
+              {mainDifficulties.map((difficulty, index) => (
+                <div key={difficulty.id} className={index === 0 ? "rounded-md shadow" : "mt-3 rounded-md shadow sm:mt-0 sm:ml-3"}>
+                  <Link
+                    to={`/${difficulty.id}`}
+                    className={`flex items-center justify-center w-full px-8 py-3 text-base font-medium text-white border border-transparent rounded-md md:py-4 md:text-lg md:px-10`}
+                    style={{ 
+                      backgroundColor: difficulty.color_text || '#16a34a',
+                      color: 'white' 
+                    }}
+                    onMouseOver={(e) => {
+                      e.currentTarget.style.backgroundColor = difficulty.color_accent || '#15803d';
+                    }}
+                    onMouseOut={(e) => {
+                      e.currentTarget.style.backgroundColor = difficulty.color_text || '#16a34a';
+                    }}
+                  >
+                    {index === 0 ? `${difficulty.display_name || difficulty.name} 시작하기` : `${difficulty.display_name || difficulty.name} 문제 풀기`}
+                  </Link>
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -56,14 +126,17 @@ export default function Index() {
               알고리즘 학습을 더 효과적으로
             </p>
             <p className="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">
-              알고매직은 초보자부터 중급자까지 누구나 쉽게 알고리즘을 배울 수 있도록 설계되었습니다.
+              알고매직은 초보자부터 상급자까지 누구나 쉽게 알고리즘을 배울 수 있도록 설계되었습니다.
             </p>
           </div>
 
           <div className="mt-10">
             <div className="space-y-10 md:space-y-0 md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-10">
               <div className="relative">
-                <div className="absolute flex items-center justify-center h-12 w-12 rounded-md bg-tutorial-500 text-white">
+                <div 
+                  className="absolute flex items-center justify-center h-12 w-12 rounded-md text-white"
+                  style={{ backgroundColor: difficulties[0]?.color_accent || '#16a34a' }}
+                >
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5" />
                   </svg>
@@ -71,13 +144,16 @@ export default function Index() {
                 <div className="ml-16">
                   <h3 className="text-lg leading-6 font-medium text-gray-900">단계별 학습</h3>
                   <p className="mt-2 text-base text-gray-500">
-                    튜토리얼 단계부터 브론즈 난이도까지, 체계적으로 알고리즘 개념을 학습할 수 있습니다.
+                    {difficulties.length > 0 ? `${difficulties[0]?.display_name} 단계부터 ${difficulties[difficulties.length - 1]?.display_name} 난이도까지` : '다양한 난이도에 따라'}, 체계적으로 알고리즘 개념을 학습할 수 있습니다.
                   </p>
                 </div>
               </div>
 
               <div className="relative">
-                <div className="absolute flex items-center justify-center h-12 w-12 rounded-md bg-bronze-500 text-white">
+                <div 
+                  className="absolute flex items-center justify-center h-12 w-12 rounded-md text-white"
+                  style={{ backgroundColor: difficulties[1]?.color_accent || '#a84117' }}
+                >
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09Z" />
                   </svg>
@@ -91,7 +167,10 @@ export default function Index() {
               </div>
 
               <div className="relative">
-                <div className="absolute flex items-center justify-center h-12 w-12 rounded-md bg-tutorial-500 text-white">
+                <div 
+                  className="absolute flex items-center justify-center h-12 w-12 rounded-md text-white"
+                  style={{ backgroundColor: difficulties[0]?.color_accent || '#16a34a' }}
+                >
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 7.5l3 2.25-3 2.25m4.5 0h3m-9 8.25h13.5A2.25 2.25 0 0 0 21 18V6a2.25 2.25 0 0 0-2.25-2.25H5.25A2.25 2.25 0 0 0 3 6v12a2.25 2.25 0 0 0 2.25 2.25Z" />
                   </svg>
@@ -105,7 +184,10 @@ export default function Index() {
               </div>
 
               <div className="relative">
-                <div className="absolute flex items-center justify-center h-12 w-12 rounded-md bg-bronze-500 text-white">
+                <div 
+                  className="absolute flex items-center justify-center h-12 w-12 rounded-md text-white"
+                  style={{ backgroundColor: difficulties[1]?.color_accent || '#a84117' }}
+                >
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M15.042 21.672 13.684 16.6m0 0-2.51 2.225.569-9.47 5.227 7.917-3.286-.672Zm-7.518-.267A8.25 8.25 0 1 1 20.25 10.5M8.288 14.212A5.25 5.25 0 1 1 17.25 10.5" />
                   </svg>
@@ -129,96 +211,47 @@ export default function Index() {
             난이도별 학습 가이드
           </h2>
           
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-            <div className="bg-white overflow-hidden shadow rounded-lg transition-all hover:shadow-lg border border-tutorial-100">
-              <div className="px-4 py-5 sm:p-6">
-                <div className="flex items-center">
-                  <div className="flex-shrink-0 bg-tutorial-500 rounded-md p-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6 text-white">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 0 0 1.5-.189m-1.5.189a6.01 6.01 0 0 1-1.5-.189m3.75 7.478a12.06 12.06 0 0 1-4.5 0m3.75 2.383a14.406 14.406 0 0 1-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 1 0-7.517 0c.85.493 1.509 1.333 1.509 2.316V18" />
-                    </svg>
-                  </div>
-                  <div className="ml-5">
-                    <h3 className="text-2xl font-bold text-gray-900">튜토리얼 난이도</h3>
-                    <p className="mt-2 text-base text-gray-500">
-                      프로그래밍 기초를 다지는 단계입니다. 출력, 사칙연산, 조건문, 반복문 등 기초 개념을 학습합니다.
-                    </p>
-                    <div className="mt-4 space-y-2">
-                      <div className="flex items-center text-sm">
-                        <svg className="flex-shrink-0 mr-1.5 h-5 w-5 text-tutorial-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                          <path fillRule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" />
-                        </svg>
-                        <span className="text-gray-600">출력 / 사칙연산</span>
-                      </div>
-                      <div className="flex items-center text-sm">
-                        <svg className="flex-shrink-0 mr-1.5 h-5 w-5 text-tutorial-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                          <path fillRule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" />
-                        </svg>
-                        <span className="text-gray-600">조건문 / 반복문</span>
-                      </div>
-                      <div className="flex items-center text-sm">
-                        <svg className="flex-shrink-0 mr-1.5 h-5 w-5 text-tutorial-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                          <path fillRule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" />
-                        </svg>
-                        <span className="text-gray-600">문자열 / 배열</span>
-                      </div>
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+            {difficulties.map((difficulty) => (
+              <div 
+                key={difficulty.id}
+                className="bg-white overflow-hidden shadow rounded-lg transition-all hover:shadow-lg"
+                style={{ borderColor: difficulty.color_border || '#bbf7d0', borderWidth: '1px' }}
+              >
+                <div className="px-4 py-5 sm:p-6">
+                  <div className="flex items-center">
+                    <div 
+                      className="flex-shrink-0 rounded-md p-3 text-white"
+                      style={{ backgroundColor: difficulty.color_accent || '#16a34a' }}
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 0 0 1.5-.189m-1.5.189a6.01 6.01 0 0 1-1.5-.189m3.75 7.478a12.06 12.06 0 0 1-4.5 0m3.75 2.383a14.406 14.406 0 0 1-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 1 0-7.517 0c.85.493 1.509 1.333 1.509 2.316V18" />
+                      </svg>
+                    </div>
+                    <div className="ml-5">
+                      <h3 className="text-2xl font-bold text-gray-900">{difficulty.display_name || difficulty.name} 난이도</h3>
+                      <p className="mt-2 text-base text-gray-500">
+                        {difficulty.description}
+                      </p>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div className="bg-tutorial-50 px-4 py-4 sm:px-6">
-                <div className="text-sm">
-                  <Link to="/tutorial" className="font-medium text-tutorial-700 hover:text-tutorial-800">
-                    튜토리얼 시작하기<span aria-hidden="true"> &rarr;</span>
-                  </Link>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white overflow-hidden shadow rounded-lg transition-all hover:shadow-lg border border-bronze-100">
-              <div className="px-4 py-5 sm:p-6">
-                <div className="flex items-center">
-                  <div className="flex-shrink-0 bg-bronze-500 rounded-md p-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6 text-white">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 18.75h-9m9 0a3 3 0 0 1 3 3h-15a3 3 0 0 1 3-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 0 1-.982-3.172M9.497 14.25a7.454 7.454 0 0 0 .981-3.172M5.25 4.236c-.982.143-1.954.317-2.916.52A6.003 6.003 0 0 0 7.73 9.728M5.25 4.236V4.5c0 2.108.966 3.99 2.48 5.228M5.25 4.236V2.721C7.456 2.41 9.71 2.25 12 2.25c2.291 0 4.545.16 6.75.47v1.516M7.73 9.728a6.726 6.726 0 0 0 2.748 1.35m8.272-6.842V4.5c0 2.108-.966 3.99-2.48 5.228m2.48-5.492a46.32 46.32 0 0 1 2.916.52 6.003 6.003 0 0 1-5.395 4.972m0 0a6.726 6.726 0 0 1-2.749 1.35m0 0a6.772 6.772 0 0 1-3.044 0" />
-                    </svg>
-                  </div>
-                  <div className="ml-5">
-                    <h3 className="text-2xl font-bold text-gray-900">브론즈 난이도</h3>
-                    <p className="mt-2 text-base text-gray-500">
-                      기초를 응용한 간단한 문제들입니다. 구현, 시뮬레이션, 조건 분기 등 실전 문제 풀이를 시작합니다.
-                    </p>
-                    <div className="mt-4 space-y-2">
-                      <div className="flex items-center text-sm">
-                        <svg className="flex-shrink-0 mr-1.5 h-5 w-5 text-bronze-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                          <path fillRule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" />
-                        </svg>
-                        <span className="text-gray-600">구현 문제</span>
-                      </div>
-                      <div className="flex items-center text-sm">
-                        <svg className="flex-shrink-0 mr-1.5 h-5 w-5 text-bronze-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                          <path fillRule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" />
-                        </svg>
-                        <span className="text-gray-600">시뮬레이션</span>
-                      </div>
-                      <div className="flex items-center text-sm">
-                        <svg className="flex-shrink-0 mr-1.5 h-5 w-5 text-bronze-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                          <path fillRule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" />
-                        </svg>
-                        <span className="text-gray-600">조건 분기</span>
-                      </div>
-                    </div>
+                <div
+                  className="px-4 py-4 sm:px-6"
+                  style={{ backgroundColor: difficulty.color_bg_light || '#f0fdf4' }}
+                >
+                  <div className="text-sm">
+                    <Link 
+                      to={`/${difficulty.id}`} 
+                      style={{ color: difficulty.color_accent || '#15803d' }}
+                      className="font-medium hover:underline"
+                    >
+                      {difficulty.display_name || difficulty.name} {difficulty.id === 'tutorial' ? '시작하기' : '문제 풀어보기'}<span aria-hidden="true"> &rarr;</span>
+                    </Link>
                   </div>
                 </div>
               </div>
-              <div className="bg-bronze-50 px-4 py-4 sm:px-6">
-                <div className="text-sm">
-                  <Link to="/bronze" className="font-medium text-bronze-700 hover:text-bronze-800">
-                    브론즈 문제 풀어보기<span aria-hidden="true"> &rarr;</span>
-                  </Link>
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>
