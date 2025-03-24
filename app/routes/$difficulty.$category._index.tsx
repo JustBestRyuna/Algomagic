@@ -5,6 +5,7 @@ import * as fs from "fs/promises";
 import * as path from "path";
 import { createServerClient } from '@supabase/ssr';
 import type { Database } from "~/types/database.types";
+import Icon from "~/components/IconLibrary";
 
 interface Problem {
   id: string;
@@ -264,7 +265,10 @@ export default function CategoryIndex() {
           className="hover:underline mb-4 inline-block"
           style={{ color: colors.text }}
         >
-          ← {difficultyName} 난이도로 돌아가기
+          <div className="flex items-center">
+            <Icon iconId="chevron-left" className="w-5 h-5 mr-1" />
+            {difficultyName} 난이도로 돌아가기
+          </div>
         </Link>
         <h1 className="text-3xl font-bold mt-2">{categoryName} 문제 모음</h1>
         <p className="mt-2 text-gray-600">

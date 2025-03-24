@@ -1,5 +1,5 @@
 import { LoaderFunctionArgs, MetaFunction, json } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { useLoaderData, Link } from "@remix-run/react";
 import ProblemLayout from "~/components/ProblemLayout";
 import invariant from "tiny-invariant";
 import { createServerClient } from '@supabase/ssr';
@@ -8,6 +8,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkBreaks from 'remark-breaks';
 import remarkGfm from 'remark-gfm';
 import { ReactNode, HTMLAttributes } from "react";
+import Icon from "~/components/IconLibrary";
 
 interface ProblemData {
   title: string;
@@ -229,7 +230,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
   ];
 };
 
-export default function ProblemRoute() {
+export default function Problem() {
   const data = useLoaderData<typeof loader>();
 
   // 마크다운 컴포넌트 타입 정의
@@ -313,28 +314,69 @@ export default function ProblemRoute() {
   };
 
   return (
-    <ProblemLayout
-      title={data.title}
-      difficulty={data.difficultyName}
-      category={data.categoryName}
-      categoryPath={data.category}
-      solutionIdea={data.solutionIdea}
-      pythonCode={data.pythonCode}
-      cppCode={data.cppCode}
-      colors={data.colors}
-      isRequired={data.is_required}
-      moduleOrder={data.module_order}
-      moduleDescription={data.module_description}
-      ojLink={data.oj_link}
-    >
-      <div className="markdown-content whitespace-pre-wrap">
-        <ReactMarkdown 
-          remarkPlugins={[remarkBreaks, remarkGfm]} 
-          components={markdownComponents}
-        >
-          {data.content}
-        </ReactMarkdown>
+    <div className="pb-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between">
+          <nav className="flex" aria-label="Breadcrumb">
+            <ol className="flex items-center space-x-2">
+              <li>
+                <Link 
+                  to={`/${data.difficulty}`} 
+                  className="hover:underline text-sm font-medium text-gray-600 hover:text-gray-800"
+                >
+                  <div className="flex items-center">
+                    <Icon iconId="home" className="w-4 h-4 mr-1" />
+                    {data.difficultyName}
+                  </div>
+                </Link>
+              </li>
+              <li>
+                <div className="flex items-center">
+                  <Icon iconId="chevron-right" className="w-4 h-4 text-gray-400" />
+                  <Link 
+                    to={`/${data.difficulty}/${data.category}`} 
+                    className="ml-2 hover:underline text-sm font-medium text-gray-600 hover:text-gray-800"
+                  >
+                    {data.categoryName}
+                  </Link>
+                </div>
+              </li>
+              <li>
+                <div className="flex items-center">
+                  <Icon iconId="chevron-right" className="w-4 h-4 text-gray-400" />
+                  <span className="ml-2 text-sm font-medium text-gray-800">
+                    {data.title}
+                  </span>
+                </div>
+              </li>
+            </ol>
+          </nav>
+        </div>
       </div>
-    </ProblemLayout>
+      
+      <ProblemLayout
+        title={data.title}
+        difficulty={data.difficultyName}
+        category={data.categoryName}
+        categoryPath={data.category}
+        solutionIdea={data.solutionIdea}
+        pythonCode={data.pythonCode}
+        cppCode={data.cppCode}
+        colors={data.colors}
+        isRequired={data.is_required}
+        moduleOrder={data.module_order}
+        moduleDescription={data.module_description}
+        ojLink={data.oj_link}
+      >
+        <div className="markdown-content whitespace-pre-wrap">
+          <ReactMarkdown 
+            remarkPlugins={[remarkBreaks, remarkGfm]} 
+            components={markdownComponents}
+          >
+            {data.content}
+          </ReactMarkdown>
+        </div>
+      </ProblemLayout>
+    </div>
   );
 } 

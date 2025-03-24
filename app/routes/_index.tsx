@@ -2,6 +2,7 @@ import { MetaFunction, json } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import { supabase } from "~/utils/supabase.server";
 import { Difficulty } from "~/root";
+import Icon from "~/components/IconLibrary";
 
 interface LoaderData {
   difficulties: Difficulty[];
@@ -137,9 +138,7 @@ export default function Index() {
                   className="absolute flex items-center justify-center h-12 w-12 rounded-md text-white"
                   style={{ backgroundColor: difficulties[0]?.color_accent || '#16a34a' }}
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5" />
-                  </svg>
+                  <Icon iconId="academic-cap" className="w-6 h-6" />
                 </div>
                 <div className="ml-16">
                   <h3 className="text-lg leading-6 font-medium text-gray-900">단계별 학습</h3>
@@ -154,9 +153,7 @@ export default function Index() {
                   className="absolute flex items-center justify-center h-12 w-12 rounded-md text-white"
                   style={{ backgroundColor: difficulties[1]?.color_accent || '#a84117' }}
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09Z" />
-                  </svg>
+                  <Icon iconId="sparkles" className="w-6 h-6" />
                 </div>
                 <div className="ml-16">
                   <h3 className="text-lg leading-6 font-medium text-gray-900">상세한 풀이 가이드</h3>
@@ -171,26 +168,7 @@ export default function Index() {
                   className="absolute flex items-center justify-center h-12 w-12 rounded-md text-white"
                   style={{ backgroundColor: difficulties[0]?.color_accent || '#16a34a' }}
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 7.5l3 2.25-3 2.25m4.5 0h3m-9 8.25h13.5A2.25 2.25 0 0 0 21 18V6a2.25 2.25 0 0 0-2.25-2.25H5.25A2.25 2.25 0 0 0 3 6v12a2.25 2.25 0 0 0 2.25 2.25Z" />
-                  </svg>
-                </div>
-                <div className="ml-16">
-                  <h3 className="text-lg leading-6 font-medium text-gray-900">코드 예제 제공</h3>
-                  <p className="mt-2 text-base text-gray-500">
-                    Python과 C++로 작성된 모범 답안 코드를 제공하며, 주석을 통해 코드를 이해하기 쉽게 설명합니다.
-                  </p>
-                </div>
-              </div>
-
-              <div className="relative">
-                <div 
-                  className="absolute flex items-center justify-center h-12 w-12 rounded-md text-white"
-                  style={{ backgroundColor: difficulties[1]?.color_accent || '#a84117' }}
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.042 21.672 13.684 16.6m0 0-2.51 2.225.569-9.47 5.227 7.917-3.286-.672Zm-7.518-.267A8.25 8.25 0 1 1 20.25 10.5M8.288 14.212A5.25 5.25 0 1 1 17.25 10.5" />
-                  </svg>
+                  <Icon iconId="cursor-click" className="w-6 h-6" />
                 </div>
                 <div className="ml-16">
                   <h3 className="text-lg leading-6 font-medium text-gray-900">인터랙티브 학습</h3>
@@ -224,9 +202,7 @@ export default function Index() {
                       className="flex-shrink-0 rounded-md p-3 text-white"
                       style={{ backgroundColor: difficulty.color_accent || '#16a34a' }}
                     >
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 0 0 1.5-.189m-1.5.189a6.01 6.01 0 0 1-1.5-.189m3.75 7.478a12.06 12.06 0 0 1-4.5 0m3.75 2.383a14.406 14.406 0 0 1-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 1 0-7.517 0c.85.493 1.509 1.333 1.509 2.316V18" />
-                      </svg>
+                      <Icon iconId="light-bulb" className="w-6 h-6" />
                     </div>
                     <div className="ml-5">
                       <h3 className="text-2xl font-bold text-gray-900">{difficulty.display_name || difficulty.name} 난이도</h3>

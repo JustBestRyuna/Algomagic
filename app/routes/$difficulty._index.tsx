@@ -3,15 +3,16 @@ import { Link, useLoaderData } from "@remix-run/react";
 import invariant from "tiny-invariant";
 import { createServerClient } from '@supabase/ssr';
 import type { Database } from "~/types/database.types";
+import Icon from "~/components/IconLibrary";
 
-// 카테고리 아이콘 컴포넌트
-const CategoryIcon = ({ svgPath }: { svgPath: string }) => {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-      <path strokeLinecap="round" strokeLinejoin="round" d={svgPath} />
-    </svg>
-  );
-};
+// 카테고리 아이콘 컴포넌트는 더 이상 사용하지 않음
+// const CategoryIcon = ({ svgPath }: { svgPath: string }) => {
+//   return (
+//     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+//       <path strokeLinecap="round" strokeLinejoin="round" d={svgPath} />
+//     </svg>
+//   );
+// };
 
 interface CategoryData {
   id: string;
@@ -232,7 +233,7 @@ export default function DifficultyIndex() {
                     boxShadow: "0 2px 4px -1px rgba(0, 0, 0, 0.1)",
                     color: "white"
                   }}>
-                    <CategoryIcon svgPath={category.svgPath} />
+                    <Icon iconId={category.iconId} className="w-6 h-6" />
                   </div>
                   <div className="ml-4">
                     <h2 className="text-2xl font-semibold text-gray-900">{category.title}</h2>
@@ -248,9 +249,7 @@ export default function DifficultyIndex() {
                   <ul className="space-y-2 mb-6">
                     {category.problems.map((problem) => (
                       <li key={problem.id} className="flex items-start">
-                        <svg className="flex-shrink-0 mt-1 mr-2 h-5 w-5" style={{ color: colors.text }} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                          <path fillRule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" />
-                        </svg>
+                        <Icon iconId="check" className="flex-shrink-0 mt-1 mr-2 h-5 w-5" style={{ color: colors.text }} />
                         <Link 
                           to={`/${difficulty}/${category.id}/${problem.id}`}
                           className="font-medium hover:underline"
@@ -270,9 +269,7 @@ export default function DifficultyIndex() {
                     style={{ color: colors.text }}
                   >
                     {category.title} 모든 문제 보기
-                    <svg className="ml-1 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M2 10a.75.75 0 0 1 .75-.75h12.59l-2.1-1.95a.75.75 0 1 1 1.02-1.1l3.5 3.25a.75.75 0 0 1 0 1.1l-3.5 3.25a.75.75 0 1 1-1.02-1.1l2.1-1.95H2.75A.75.75 0 0 1 2 10Z" clipRule="evenodd" />
-                    </svg>
+                    <Icon iconId="arrow-right" className="ml-1 h-5 w-5" />
                   </Link>
                 </div>
               </div>
