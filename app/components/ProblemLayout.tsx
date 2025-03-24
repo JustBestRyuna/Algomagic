@@ -446,7 +446,10 @@ export default function ProblemLayout({
               {pythonCode && (
                 <div className="p-4 rounded-lg" style={{ backgroundColor: themeColors.bgLight }}>
                   <div className="flex justify-between items-center mb-3">
-                    <h3 className="text-lg font-medium text-gray-900">Python</h3>
+                    <h3 className="text-lg font-medium text-gray-900 flex items-center">
+                      Python
+                      <Icon iconId="python" className="ml-1 h-5 w-5 text-blue-600" />
+                    </h3>
                     <button
                       onClick={() => setShowPythonCode(!showPythonCode)}
                       className="hover:underline flex items-center text-sm"
@@ -504,7 +507,10 @@ export default function ProblemLayout({
               {cppCode && (
                 <div className="p-4 rounded-lg" style={{ backgroundColor: themeColors.bgLight }}>
                   <div className="flex justify-between items-center mb-3">
-                    <h3 className="text-lg font-medium text-gray-900">C++</h3>
+                    <h3 className="text-lg font-medium text-gray-900 flex items-center">
+                      C++
+                      <Icon iconId="cpp" className="ml-1 h-5 w-5 text-blue-600" />
+                    </h3>
                     <button
                       onClick={() => setShowCppCode(!showCppCode)}
                       className="hover:underline flex items-center text-sm"
