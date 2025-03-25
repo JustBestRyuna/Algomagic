@@ -13,7 +13,7 @@ const iconComponents: Record<string, React.ComponentType<React.SVGProps<SVGSVGEl
   'array': Md.MdGridOn,
   'chevron-right': Hi.HiChevronRight,
   'chevron-left': Hi.HiChevronLeft,
-  'advanced-io': Md.MdCloudUpload,
+  'io-advanced': Md.MdCloudUpload,
   'implementation': Hi.HiPuzzle,
   'simulation': Hi.HiCube,
   'condition-branching': Hi.HiSwitchHorizontal,
