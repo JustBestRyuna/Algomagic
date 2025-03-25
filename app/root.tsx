@@ -17,6 +17,7 @@ import { supabase } from "~/utils/supabase.server";
 import "./tailwind.css";
 import "./styles/mdx.css";
 import "./styles/prism.css";
+import 'katex/dist/katex.min.css';
 
 export const links: LinksFunction = () => [
   {
@@ -88,7 +89,7 @@ export const loader = async () => {
   // 수동으로 정의한 난이도 순서
   const difficultyOrder = {
     'tutorial': 0,
-    'bronze': 1, 
+    'bronze': 1,
     'silver': 2,
     'gold': 3,
     'platinum': 4,
@@ -103,21 +104,21 @@ export const loader = async () => {
         .from('categories')
         .select('*', { count: 'exact' })
         .eq('difficulty_id', difficulty.id);
-      
+
       if (countError) {
         console.error(`${difficulty.id} 난이도의 카테고리 수를 가져오는데 실패했습니다:`, countError);
-        return { 
-          ...difficulty, 
-          categoryCount: 0, 
+        return {
+          ...difficulty,
+          categoryCount: 0,
           display_name: difficulty.name,
           description: difficulty.short_description,
           orderIndex: difficultyOrder[difficulty.id as keyof typeof difficultyOrder] || 999
         };
       }
-      
-      return { 
-        ...difficulty, 
-        categoryCount: count || 0, 
+
+      return {
+        ...difficulty,
+        categoryCount: count || 0,
         display_name: difficulty.name,
         description: difficulty.short_description,
         orderIndex: difficultyOrder[difficulty.id as keyof typeof difficultyOrder] || 999
@@ -134,46 +135,46 @@ export const loader = async () => {
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ko" className="h-full">
-      <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <Meta />
-        <Links />
-      </head>
-      <body className="h-full">
-        {children}
-        <GoogleAnalytics />
-        <ScrollRestoration />
-        <Scripts />
-      </body>
+    <head>
+      <meta charSet="utf-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <Meta />
+      <Links />
+    </head>
+    <body className="h-full">
+    {children}
+    <GoogleAnalytics />
+    <ScrollRestoration />
+    <Scripts />
+    </body>
     </html>
   );
 }
 
 export default function App() {
   const { difficulties } = useLoaderData<typeof loader>();
-  
+
   return (
     <html lang="ko" className="h-full">
-      <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <Meta />
-        <Links />
-      </head>
-      <body className="h-full">
-        <div className="flex flex-col min-h-screen">
-          <Navigation difficulties={difficulties} />
-          <main className="flex-grow">
-            <Outlet />
-          </main>
-          <Footer />
-        </div>
+    <head>
+      <meta charSet="utf-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <Meta />
+      <Links />
+    </head>
+    <body className="h-full">
+    <div className="flex flex-col min-h-screen">
+      <Navigation difficulties={difficulties} />
+      <main className="flex-grow">
+        <Outlet />
+      </main>
+      <Footer />
+    </div>
 
-        <GoogleAnalytics />
-        <ScrollRestoration />
-        <Scripts />
-      </body>
+    <GoogleAnalytics />
+    <ScrollRestoration />
+    <Scripts />
+    </body>
     </html>
   );
 }

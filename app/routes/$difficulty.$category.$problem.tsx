@@ -7,6 +7,8 @@ import type { Database } from "~/types/database.types";
 import ReactMarkdown from 'react-markdown';
 import remarkBreaks from 'remark-breaks';
 import remarkGfm from 'remark-gfm';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
 import { ReactNode, HTMLAttributes } from "react";
 import Icon from "~/components/IconLibrary";
 
@@ -370,7 +372,8 @@ export default function Problem() {
       >
         <div className="markdown-content whitespace-pre-wrap">
           <ReactMarkdown 
-            remarkPlugins={[remarkBreaks, remarkGfm]} 
+            remarkPlugins={[remarkBreaks, remarkGfm, remarkMath]} 
+            rehypePlugins={[rehypeKatex]}
             components={markdownComponents}
           >
             {data.content}
