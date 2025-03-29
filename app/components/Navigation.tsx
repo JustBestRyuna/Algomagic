@@ -1,6 +1,7 @@
 import { Link } from "@remix-run/react";
 import Icon from "~/components/IconLibrary";
 import { useState } from "react";
+import { Search } from "~/components/Search";
 
 // Navigation 컴포넌트에서 사용할 타입 정의
 interface Difficulty {
@@ -74,7 +75,8 @@ export function Navigation({ difficulties }: NavigationProps) {
               ))}
             </div>
           </div>
-          <div className="hidden sm:ml-6 sm:flex sm:items-center">
+          <div className="hidden sm:ml-6 sm:flex sm:items-center space-x-4">
+            <Search className="w-64 text-sm" />
             <span className="px-3 py-1 text-sm rounded-full bg-gray-100 text-gray-800">
               MVP 버전
             </span>
@@ -125,6 +127,11 @@ export function Navigation({ difficulties }: NavigationProps) {
               {difficulty.display_name || difficulty.name}
             </Link>
           ))}
+          
+          {/* 모바일 검색 폼 */}
+          <div className="px-3 py-2">
+            <Search className="w-full" />
+          </div>
         </div>
       </div>
     </nav>
